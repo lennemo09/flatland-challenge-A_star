@@ -1,14 +1,15 @@
 import time
+import numpy as np
 import threading
 
 import pyglet
 
+from flatland.envs.agent_utils import EnvAgent, RailAgentStatus
 from flatland.envs.rail_generators import complex_rail_generator
 from flatland.envs.schedule_generators import complex_schedule_generator
-from flatland.envs.rail_env import RailEnv
+from flatland.envs.rail_env import RailEnv, RailEnvActions
 from flatland.utils.rendertools import RenderTool
 from flatland.utils.graphics_pgl import RailViewWindow
-from flatland.envs.agent_utils import EnvAgent, RailAgentStatus
 from math import floor
 
 import planpath
@@ -16,10 +17,14 @@ import planpath
 def evalfun(debug = False, refresh = 0.1): # refresh default = 0.1
     # A list of (mapsize, agent count) tuples, change or extend this to test different sizes.
     #problemsizes = [(5, 1), (7, 2), (10,3), (13,4), (40, 20)]
-    problemsizes = [(5, 1), (5,2), (6,3), (7,4), (8,5)]
+    #problemsizes = [(5, 1), (5,2), (6,3), (7,3), (14,4), (8,5)]
+    problemsizes = [(6, 3)]
 
-    _seed = 2984379
+    _seed = np.random.randint(1, 9999999)
 
+    #_seed = 2
+
+    print("Seed:",_seed)
     print("%10s\t%8s\t%9s" % ("Dimensions", "Success", "Runtime"))
     for problemsize in problemsizes:
 
@@ -44,7 +49,7 @@ def evalfun(debug = False, refresh = 0.1): # refresh default = 0.1
 
         # Initialize positions.
         env.reset(random_seed=_seed)
-
+        env_renderer.render_env(show=True, frames=False, show_observations=False)
         # Time the search.
         start = time.time()
         schedule = planpath.search(env)
@@ -59,7 +64,7 @@ def evalfun(debug = False, refresh = 0.1): # refresh default = 0.1
         assert env.num_resets == 1 and env._elapsed_steps == 0
 
         # Run the schedule
-        success = False;
+        success = False
         for action in schedule:
             _, _, _done, _ = env.step(action)
             success = _done['__all__']

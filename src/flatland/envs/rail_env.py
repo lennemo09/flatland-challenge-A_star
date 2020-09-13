@@ -130,7 +130,7 @@ class RailEnv(Environment):
     def __init__(self,
                  width,
                  height,
-                 rail_generator = None, 
+                 rail_generator = None,
                  schedule_generator = None, # : sched_gen.ScheduleGenerator = sched_gen.random_schedule_generator(),
                  number_of_agents=1,
                  obs_builder_object: ObservationBuilder = GlobalObsForRailEnv(),
@@ -230,7 +230,7 @@ class RailEnv(Environment):
         # save episode timesteps ie agent positions, orientations.  (not yet actions / observations)
         self.record_steps = record_steps  # whether to save timesteps
         # save timesteps in here: [[[row, col, dir, malfunction],...nAgents], ...nSteps]
-        self.cur_episode = []  
+        self.cur_episode = []
         self.list_actions = [] # save actions in here
 
     def _seed(self, seed=None):
@@ -858,5 +858,3 @@ class RailEnv(Environment):
     def save(self, filename):
         print("deprecated call to env.save() - pls call RailEnvPersister.save()")
         persistence.RailEnvPersister.save(self, filename)
-
-
